@@ -1,0 +1,21 @@
+MongoDB Atlas:
+1. Login at https://cloud.mongodb.com/
+2. Find project 0 and find cluster SmartPodium (https://i.imgur.com/cypbpE3.png)
+3. Click to "Browse Collection", you can see SinhVien collection (table) and its data.
+
+Your computer:
+1. Download and Install python 3.7 (sudo apt-install python3.7)
+2. Open CMD ad Admin, install following python packages in Command :
+python3.7 -m pip install --no-cache-dir pymongo
+python3.7 -m pip install --no-cache-dir dnspython
+python3.7 -m pip install --no-cache-dir python-dateutil
+python3.7 -m pip install --no-cache-dir pandas
+python3.7 -m pip install --no-cache-dir certifi
+3. cd to this folder
+4. run file pymongo_test_query:
+python3.7 pymongo_test_query
+5. sinh vien datas will be printed in the command line
+
+Source:
+https://www.mongodb.com/languages/python
+https://www.mongodb.com/docs/manual/reference/sql-comparison/
