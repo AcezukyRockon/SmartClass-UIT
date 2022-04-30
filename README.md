@@ -42,6 +42,7 @@ python3.7 pymongo_test_query
 Source:
 https://www.mongodb.com/languages/python
 https://www.mongodb.com/docs/manual/reference/sql-comparison/
+
 --------------------------------------------------------------------------------------------
 
 Installations for HiveMQ and MongoDB:
