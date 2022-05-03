@@ -2,10 +2,11 @@
 from mongodb_init import get_database
 import paho.mqtt.client as paho
 import time
+import json
 
 # Create a new collection
 dbname = get_database()
-collection_name = dbname["Trang"]
+collection_name = dbname["LED"]
 item_details = collection_name.find()
 #category_index = collection_name.create_index("category")
 #item_details = collection_name.find({"category" : "food"})
@@ -18,17 +19,16 @@ item_details = collection_name.find()
 
 # hiveMQ setup
 def on_publish(client, userdata, mid):
-    print("mid: "+str(mid))
+    print(item["Status"])
  
 client = paho.Client()
 client.on_publish = on_publish
 client.username_pw_set("nhom1", "nhom1")
 client.connect("broker.mqttdashboard.com", 1883)
 client.loop_start()
-temperature = 0
 
 for item in item_details:
     # see the magic
-    print(item)
-    (rc, mid) = client.publish("LED/Status", str(item), qos=0)
+    # print(item["Status"]) (at on_publish)
+    (rc, mid) = client.publish("LED/Status", item["Status"], qos=0)
     time.sleep(1)
