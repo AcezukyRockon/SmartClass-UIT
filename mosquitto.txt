@@ -7,19 +7,23 @@ https://github.com/eclipse/paho.mqtt.c/tree/master/src/samples
 https://en.wikipedia.org/wiki/Comparison_of_MQTT_implementations
 https://mosquitto.org/api/files/mosquitto-h.html#mosquitto_loop
 https://www.eclipse.org/paho/files/mqttdoc/MQTTClient/html/_m_q_t_t_client_8h.html#afe9c34013c3511b8ef6cd36bf703678d
+https://thanhphu.net/2018/11/28/how-to-write-a-c-mqtt-client-using-mosquitto/
+Remove retained message: http://www.steves-internet-guide.com/mqtt-retained-messages-example/
 
 works local: https://github.com/Johannes4Linux/libmosquitto_examples/blob/master/mqtt_pub.c
 local esp32 mosquitto: https://www.youtube.com/watch?v=wolBNnvq2Sk
 works public!!: https://github.com/thanhphu/mosquitto-sample/blob/master/mypub.c
 
 compile (when alr install mongo c driver): gcc -o out main.c $(pkg-config --cflags --libs libmongoc-1.0)
-
 compile (when alr install mongocxx): c++ --std=c++11 -o out main.cpp $(pkg-config --cflags --libs libmongocxx) -Wl,-rpath,/usr/local/lib -lmosquitto
-
 Then type this to run file: ./out
 
+API:
+https://mosquitto.org/api/files/mosquitto-h.html
+https://www.eclipse.org/paho/files/mqttdoc/MQTTClient/html/_m_q_t_t_client_8h.html
+
 Step by step:
-1. Open hivemq broker and setup username and pass, then connect and subscribe "LED/Status" as QS0.
+1. Open hivemq broker (http://www.hivemq.com/demos/websocket-client/) and setup username and pass, then connect and subscribe "LED/Status" as QS0.
 2. Go to mosquitto_c folder, open file main.cpp and setup all the #defines and the char[100] to publish
 3. Save file, compile with one of above compile line, then run file out.
 4. See Message on hiveMQ broker's message and LED in ESP32 flash/turn off
