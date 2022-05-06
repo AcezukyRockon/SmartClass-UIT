@@ -1,0 +1,7 @@
+source: 
+https://www.mongodb.com/docs/drivers/c/
+http://mongoc.org/
+http://mongoc.org/libmongoc/current/tutorial.html
+https://stackoverflow.com/questions/5141960/get-the-current-time-in-c
+https://stackoverflow.com/questions/9628637/how-can-i-get-rid-of-n-from-string-in-c
+

@@ -1,0 +1,46 @@
+source: 
+http://mongocxx.org/
+http://mongocxx.org/mongocxx-v3/installation/linux/
+http://mongoc.org/libmongoc/current/installing.html
+https://stackoverflow.com/questions/58389634/install-mongodb-c-driver-problem-in-ubuntu-16-04
+http://mongocxx.org/mongocxx-v3/tutorial/
+https://jira.mongodb.org/browse/CXX-1425
+https://github.com/mongodb/mongo-cxx-driver/blob/master/examples/mongocxx/query.cpp
+https://github.com/mongodb/mongo-cxx-driver/blob/master/examples/mongocxx/mongodb.com/documentation_examples.cpp
+https://stackoverflow.com/questions/997946/how-to-get-current-time-and-date-in-c
+https://stackoverflow.com/questions/216823/how-to-trim-a-stdstring
+
+Step by step:
+Step 1: Install libmongoc and libbson follow the link http://mongoc.org/libmongoc/current/installing.html
+sudo apt-get install libmongoc-1.0-0
+sudo apt-get install libbson-1.0-0
+sudo apt-get install cmake libssl-dev libsasl2-dev
+
+Step 2: Build and install mongo c driver:
+wget https://github.com/mongodb/mongo-c-driver/releases/download/1.21.1/mongo-c-driver-1.21.1.tar.gz
+tar xzf mongo-c-driver-1.21.1.tar.gz
+cd mongo-c-driver-1.21.1
+mkdir cmake-build
+cd cmake-build
+cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF ..
+
+If success, final output line will be: -- Build files have been written to: /home/user/mongo-c-driver-1.21.1/cmake-build
+
+cmake --build .
+sudo cmake --build . --target install
+
+Step 3: Build and install mongocxx:
+curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.6.7/mongo-cxx-driver-r3.6.7.tar.gz
+tar -xzf mongo-cxx-driver-r3.6.7.tar.gz
+cd mongo-cxx-driver-r3.6.7/build
+cmake ..                                \
+    -DCMAKE_BUILD_TYPE=Release          \
+    -DCMAKE_INSTALL_PREFIX=/usr/local
+sudo cmake --build . --target EP_mnmlstc_core
+cmake --build .
+sudo cmake --build . --target install
+
+Step 4: cd to main.cpp file, run this command:
+c++ --std=c++11 main.cpp $(pkg-config --cflags --libs libmongocxx) -Wl,-rpath,/usr/local/lib
+File a.out will be generated. Run it by typing: ./a.out
+All Json documents will appear.
