@@ -3,9 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 
-int main (int   argc,
-      char *argv[])
-{
+int main(int argc, char *argv[]) {
     mongoc_client_t *client;
     mongoc_collection_t *collection;
     bson_error_t error;
