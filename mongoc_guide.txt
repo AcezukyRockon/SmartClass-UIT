@@ -1,3 +1,4 @@
+mongo c driver
 source: 
 https://www.mongodb.com/docs/drivers/c/
 http://mongoc.org/
@@ -5,3 +6,7 @@ http://mongoc.org/libmongoc/current/tutorial.html
 https://stackoverflow.com/questions/5141960/get-the-current-time-in-c
 https://stackoverflow.com/questions/9628637/how-can-i-get-rid-of-n-from-string-in-c
 
+mongo server:
+https://www.mongodb.com/docs/guides/server/install/
+https://stackoverflow.com/questions/28987347/setting-read-write-permissions-on-mongodb-folder
+https://www.freecodecamp.org/news/learn-mongodb-a4ce205e7739/
