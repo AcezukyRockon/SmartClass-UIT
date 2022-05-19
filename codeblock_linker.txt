@@ -1,13 +1,21 @@
-Compiler setting -> Other compiler options:
+1. Compiler setting -> Other compiler options:
 -Wno-unknown-pragmas
 -isystem
 -fPIE
 -fopenmp
 -pthread
-`pkg-config --cflags --libs libmongoc-1.0`
--lmosquitto
 
-Linker setting -> Other linker option:
+2. Linker setting -> Link Libraries
+/usr/local/lib/ncnn/libncnn.a
+/usr/local/lib/ncnn/libglslang.a
+...
+/usr/lib/aarch64-linux-gnu/libvulkan.so
+libmongoc-1.0
+libmosquitto
+/usr/local/lib/libbson-static-1.0.a
+/usr/local/lib/libmongoc-static-1.0.a
+
+3. Linker setting -> Other linker option:
 -O3
 -fopenmp
 `pkg-config --libs --cflags opencv4`
@@ -17,5 +25,12 @@ Linker setting -> Other linker option:
 -lgomp
 -DNDEBUG
 -rdynamic
-`pkg-config --cflags --libs libmongoc-1.0`
--lmosquitto
+
+4. Search directories -> Compiler
+/usr/include/opencv4
+/usr/local/include/ncnn
+/usr/local/include/libmongoc-1.0
+/usr/local/include/libbson-1.0
+/usr/local/include/libbson-1.0/bson
+/usr/local/include/libmongoc-1.0/mongoc
+/usr/include
