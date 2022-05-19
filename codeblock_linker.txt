@@ -1,0 +1,21 @@
+Compiler setting -> Other compiler options:
+-Wno-unknown-pragmas
+-isystem
+-fPIE
+-fopenmp
+-pthread
+`pkg-config --cflags --libs libmongoc-1.0`
+-lmosquitto
+
+Linker setting -> Other linker option:
+-O3
+-fopenmp
+`pkg-config --libs --cflags opencv4`
+-ldl
+-lpthread
+-pthread
+-lgomp
+-DNDEBUG
+-rdynamic
+`pkg-config --cflags --libs libmongoc-1.0`
+-lmosquitto
