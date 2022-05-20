@@ -1,3 +1,4 @@
+// facereg
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include "TMtCNN.h"
@@ -6,12 +7,17 @@
 #include "TWarp.h"
 #include "TLive.h"
 #include "TBlur.h"
+//mongo
 #include <chrono>
 #include <bson/bson.h>
 #include <mongoc/mongoc.h>
 #include <stdio.h>
 #include <time.h>
 #include <string>
+//mosquitto
+#include <assert.h>
+#include <stdlib.h>
+#include <mosquitto.h>
 //----------------------------------------------------------------------------------------
 //
 // Created by markson zhang
@@ -140,6 +146,27 @@ void DrawObjects(cv::Mat &frame, vector<FaceObject> &Faces)
     }
 }
 
+// connect to mosquitto local function
+void mosquitto_facereg(char str[4]){
+    int rc;
+	struct mosquitto * mosq;
+
+	mosquitto_lib_init();
+	mosq = mosquitto_new(NULL, true, NULL);
+
+	rc = mosquitto_connect(mosq, "localhost", 1883, 60);
+	if(rc != 0){
+		printf("Client could not connect to broker! Error Code: %d\n", rc);
+		mosquitto_destroy(mosq);
+	}
+	mosquitto_publish(mosq, NULL, "LED/Status", 3, str, 0, false);
+	//printf("%d",result);
+
+	mosquitto_disconnect(mosq);
+	mosquitto_destroy(mosq);
+	mosquitto_lib_cleanup();
+}
+
 //----------------------------------------------------------------------------------------
 // main
 //----------------------------------------------------------------------------------------
@@ -186,8 +213,11 @@ int main(int argc, char **argv)
 
     //client = mongoc_client_new ("mongodb+srv://nhom1:nhom1@smartpodium.ra3hh.mongodb.net/SmartDB?retryWrites=true&w=majority");
     client = mongoc_client_new ("mongodb://localhost:27017");
-
     // mongodb end-------------------------------------------------------
+    // mosquitto message declaration
+    char mos_str_on[4] = "ONN";
+	char mos_str_off[4] = "OFF";
+
     Live.LoadModel();
 
     for(i=0;i<16;i++) FPS[i]=0.0;
@@ -353,7 +383,7 @@ int main(int argc, char **argv)
                             }
                             else{
                                 Faces[i].Color = 0; //found face in database and of good size
-                                //cout << "main: " << NameFaces[Faces[i].NameIndex] << endl;
+                                cout << "main: " << NameFaces[Faces[i].NameIndex] << endl;
 
                                 // hardcode: nameindex = 1 => str = "Trang", then put to collection
                                 // hardcode 2: make many if-case with each one in get_collection is a const char (eg one for Trang, one for Minh...)... maybe
@@ -361,6 +391,18 @@ int main(int argc, char **argv)
                                 //std::string s;
                                 //for (std::vector<std::string>::const_iterator k = NameFaces[Faces[i].NameIndex].begin(); k != NameFaces[Faces[i].NameIndex].end(); ++k)
                                 //    str_collec += *k;
+
+                                // mosquitto publish
+                                if (NameFaces[Faces[i].NameIndex] == "person 12") {
+                                    mosquitto_facereg(mos_str_on);
+                                    cout << "mosquitto ON!" << endl;
+                                }
+                                if (NameFaces[Faces[i].NameIndex] == "person 13") {
+                                    mosquitto_facereg(mos_str_off);
+                                    cout << "mosquitto OFF!" << endl;
+                                }
+
+                                // mongo update
                                 collection = mongoc_client_get_collection (client, "SmartDB", "test");
                                 doc = bson_new ();
                                 bson_oid_init (&oid, NULL);
