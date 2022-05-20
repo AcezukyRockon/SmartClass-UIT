@@ -353,7 +353,7 @@ int main(int argc, char **argv)
                             }
                             else{
                                 Faces[i].Color = 0; //found face in database and of good size
-                                cout << "main: " << NameFaces[Faces[i].NameIndex] << endl;
+                                //cout << "main: " << NameFaces[Faces[i].NameIndex] << endl;
 
                                 // hardcode: nameindex = 1 => str = "Trang", then put to collection
                                 // hardcode 2: make many if-case with each one in get_collection is a const char (eg one for Trang, one for Minh...)... maybe
@@ -371,9 +371,11 @@ int main(int argc, char **argv)
                                 if (!mongoc_collection_insert_one (
                                        collection, doc, NULL, NULL, &error)) {
                                     fprintf (stderr, "%s\n", error.message);
+                                    cout << "Failed to update mongodb:" << NameFaces[Faces[i].NameIndex] << endl;
                                 }
                                 bson_destroy (doc);
                                 mongoc_collection_destroy (collection);
+
 #ifdef TEST_LIVING
                                 //test fake face
                                 float x1 = Faces[i].rect.x;
