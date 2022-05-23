@@ -43,6 +43,7 @@ This creates a listener on port 1883 and allows anonymous connections. By defaul
 Save the file to "C:\Program Files\Mosquitto" using a file name with the ".conf" extension such as "your_conf_file.conf".
 Open a terminal window and navigate to the mosquitto directory. Run the following command:
 
+sudo service mosquitto restart
 mosquitto -v -c your_conf_file.conf
 
 where
