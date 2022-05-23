@@ -10,3 +10,64 @@ mongo server:
 https://www.mongodb.com/docs/guides/server/install/
 https://stackoverflow.com/questions/28987347/setting-read-write-permissions-on-mongodb-folder
 https://www.freecodecamp.org/news/learn-mongodb-a4ce205e7739/
+
+start mongo local:
+sudo systemctl start mongod
+sudo systemctl status mongod
+sudo systemctl restart mongod
+sudo systemctl stop mongod
+mongo
+
+check current db: 
+db
+
+Listing databases: 
+show databases
+
+Go to a particular database: 
+use <your_db_name>
+
+Creating a Collection:
+Creating a Non-Capped Collection: db.createCollection("myCollection")
+Creating a Capped Collection: db.createCollection("mySecondCollection", {capped : true, size : 2, max : 2})
+
+Inserting Data:
+db.myCollection.insertOne(
+  {
+    "name": "navindu", 
+    "age": 22
+  }
+)
+
+db.myCollection.insertMany([
+  {
+    "name": "navindu", 
+    "age": 22
+  },
+  {
+    "name": "kavindu", 
+    "age": 20
+  },
+
+  {
+    "name": "john doe", 
+    "age": 25,
+    "location": "colombo"
+  }
+])
+
+Querying Data:
+db.myCollection.find()
+db.myCollection.find().pretty()
+
+Updating documents:
+db.myCollection.update({age : 20}, {$set: {age: 23}})
+
+Removing a document:
+db.myCollection.remove({name: "navindu"});
+
+Removing a collection:
+db.myCollection.remove({});
+
+
+
