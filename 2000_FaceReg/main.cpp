@@ -403,7 +403,8 @@ int main(int argc, char **argv)
                                 }
 
                                 // mongo update
-                                collection = mongoc_client_get_collection (client, "SmartDB", "test");
+                                //collection = mongoc_client_get_collection (client, "SmartDB", "test");
+                                collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
                                 doc = bson_new ();
                                 bson_oid_init (&oid, NULL);
                                 BSON_APPEND_OID (doc, "_id", &oid);
