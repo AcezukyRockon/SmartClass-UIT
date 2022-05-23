@@ -20,14 +20,15 @@ Step 7: Try with "OFF" to turn off led. Done
 String ledStatus1 = "OFF";
 
 // Wifi config
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "ULTIMATE";
+const char* password = "dream620";
 
 // MQTT config and user config: https://www.hivemq.com/public-mqtt-broker/
-#define MQTT_SERVER "broker.mqttdashboard.com"
+//#define MQTT_SERVER "broker.mqttdashboard.com"
+#define MQTT_SERVER "192.168.1.10"
 #define MQTT_PORT 1883
-#define MQTT_USER "nhom1"
-#define MQTT_PASSWORD "nhom1"
+#define MQTT_USER ""
+#define MQTT_PASSWORD ""
  
 #define MQTT_LED1_TOPIC "LED/Status"
  
@@ -41,6 +42,7 @@ PubSubClient client(wifiClient);
 void setup_wifi() {
   Serial.print("Connecting to ");
   Serial.println(ssid);
+  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -68,7 +70,7 @@ void connect_to_broker() {
     }
   }
 }
- 
+
 void callback(char* topic, byte *payload, unsigned int length) {
   char status[20];
   Serial.println("-------new message from broker-----");
@@ -118,4 +120,3 @@ void loop() {
     connect_to_broker();
   }
 }
-
