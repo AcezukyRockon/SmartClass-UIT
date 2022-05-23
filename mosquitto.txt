@@ -27,3 +27,24 @@ Step by step:
 2. Go to mosquitto_c folder, open file main.cpp and setup all the #defines and the char[100] to publish
 3. Save file, compile with one of above compile line, then run file out.
 4. See Message on hiveMQ broker's message and LED in ESP32 flash/turn off
+
+Run mosquitto on linux:
+https://stackoverflow.com/questions/65278648/mosquitto-starting-in-local-only-mode
+conf location: /etc/mosquitto
+-----------
+By default, the Mosquitto broker will only accept connections from clients on the local machine (the server hosting the broker). 
+Therefore, a custom configuration needs to be used with your instance of Mosquitto in order to accept connections from remote clients.
+On your Windows machine, run a text editor as administrator and paste the following text:
+
+listener 1883
+allow_anonymous true
+
+This creates a listener on port 1883 and allows anonymous connections. By default the number of connections is infinite.
+Save the file to "C:\Program Files\Mosquitto" using a file name with the ".conf" extension such as "your_conf_file.conf".
+Open a terminal window and navigate to the mosquitto directory. Run the following command:
+
+mosquitto -v -c your_conf_file.conf
+
+where
+-c : specify the broker config file.
+-v : verbose mode - enable all logging types. This overrides any logging options given in the config file.
