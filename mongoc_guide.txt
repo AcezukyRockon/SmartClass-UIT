@@ -21,8 +21,9 @@ mongo
 check current db: 
 db
 
-Listing databases: 
+Listing databases/collections: 
 show databases
+show collections
 
 Go to a particular database: 
 use <your_db_name>
