@@ -20,8 +20,8 @@ Step 7: Try with "OFF" to turn off led. Done
 String ledStatus1 = "OFF";
 
 // Wifi config
-const char* ssid = "ULTIMATE";
-const char* password = "dream620";
+const char* ssid = "";
+const char* password = "";
 
 // MQTT config and user config: https://www.hivemq.com/public-mqtt-broker/
 //#define MQTT_SERVER "broker.mqttdashboard.com"
