@@ -62,3 +62,12 @@ db.myCollection.remove({name: "navindu"});
 
 Removing a collection:
 db.myCollection.remove({});
+
+------------------------------------------------
+demo:
+show database;
+use SmartDB;
+show collections;
+db.getCollection("DiemDanh").drop()
+db.getCollection("DiemDanh").find()
+db.getCollection("DiemDanh").find({"student_name":"person 10"})
