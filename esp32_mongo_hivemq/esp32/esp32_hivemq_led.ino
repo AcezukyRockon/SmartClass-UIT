@@ -79,20 +79,20 @@ void callback(char* topic, byte *payload, unsigned int length) {
   Serial.print("message: ");
   Serial.write(payload, length);
   Serial.println();
-  for(int i = 0; i<length; i++)
+  for(int i = 0; i<length+1; i++)
   {
     status[i] = payload[i];
   }
   Serial.println(status);
   if(String(topic) == MQTT_LED1_TOPIC)
   {
-    if(String(status) == "OFF")
+    if(String(status) == "OFFu")
     {
       ledStatus1 = "OFF";
       digitalWrite(LED1, LOW);
       Serial.println("LED1 OFF");
     }
-    else if(String(status) == "ON")
+    else if(String(status) == "ONNu")
     {
       ledStatus1 = "ON";
       digitalWrite(LED1, HIGH);
