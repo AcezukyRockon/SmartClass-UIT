@@ -86,13 +86,13 @@ void callback(char* topic, byte *payload, unsigned int length) {
   Serial.println(status);
   if(String(topic) == MQTT_LED1_TOPIC)
   {
-    if(String(status) == "OFFu")
+    if(String(status) == "OFFu") // u for nano jetson publish
     {
       ledStatus1 = "OFF";
       digitalWrite(LED1, LOW);
       Serial.println("LED1 OFF");
     }
-    else if(String(status) == "ONNu")
+    else if(String(status) == "ONNu") // u for nano jetson publish
     {
       ledStatus1 = "ON";
       digitalWrite(LED1, HIGH);
