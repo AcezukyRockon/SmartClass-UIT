@@ -10,8 +10,10 @@ int sensor_state = 0;
 long lastMsg = 0; // for delay sensor
 /* 
 Step 1: Hardware Setup
-LED -> ESP32:
-- VCC -> pin 13
+LED1 -> ESP32:
+- VCC LED1 -> pin 13
+- VCC LED2 -> pin 12
+- VCC LED1 -> pin 15
 - GND -> GND
 Step 2: Setup wifi ssid and password (your wifi name and password)
 Step 3: Go to http://www.hivemq.com/demos/websocket-client/, setup Username and Password, then fill at MQTT_USER and MQTT_PASSWORD
@@ -24,8 +26,8 @@ Step 7: Try with "OFF" to turn off led. Done
 String ledStatus1 = "OFF";
 
 // Wifi config
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "ULTIMATE";
+const char* password = "dream620";
 
 // MQTT config and user config: https://www.hivemq.com/public-mqtt-broker/
 #define MQTT_SERVER "broker.mqttdashboard.com"
