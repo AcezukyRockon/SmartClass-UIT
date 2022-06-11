@@ -211,6 +211,7 @@ int main(int argc, char **argv)
     int count_face_yes = 0;
     int count_face_total = 0;
     float count_face_yes_percent = 0;
+    auto duration_total = 0;
 
     time_t rawtime;
     struct tm * timeinfo;
@@ -428,7 +429,7 @@ int main(int argc, char **argv)
                                 auto start_timer = high_resolution_clock::now();
                                 Faces[i].Color = 0; //found face in database and of good size
                                 cout << "main: " << NameFaces[Faces[i].NameIndex] << endl;
-                                //count_face_yes++;
+                                count_face_yes++;
                                 //count_face_total++;
                                 // hardcode: nameindex = 1 => str = "Trang", then put to collection
                                 // hardcode 2: make many if-case with each one in get_collection is a const char (eg one for Trang, one for Minh...)... maybe
@@ -473,6 +474,8 @@ int main(int argc, char **argv)
                                 auto stop_timer = high_resolution_clock::now();
                                 auto duration = duration_cast<microseconds>(stop_timer - start_timer);
                                 cout << "Time taken by function: "<< duration.count() << " microseconds" << endl;
+                                duration_total = float(duration_total + duration.count()/count_face_yes);
+                                cout << "Average duration after " << count_face_yes << "time(s): " << duration_total << " microseconds" << endl;
 
 #ifdef TEST_LIVING
                                 //test fake face
