@@ -210,7 +210,6 @@ int main(int argc, char **argv)
     // lux test case------------------------------------------------------
     int count_face_yes = 0;
     int count_face_total = 0;
-    float count_face_yes_percent = 0;
     auto duration_total = 0;
 
     time_t rawtime;
@@ -338,6 +337,7 @@ int main(int argc, char **argv)
     cout << "Start grabbing, press ESC on TLive window to terminate" << endl;
     while(1){
         cap >> frame;
+        count_face_total++;
         if (frame.empty()) {
             cerr << "End of movie" << endl;
             break;
@@ -473,9 +473,9 @@ int main(int argc, char **argv)
 
                                 auto stop_timer = high_resolution_clock::now();
                                 auto duration = duration_cast<microseconds>(stop_timer - start_timer);
-                                cout << "Time taken by function: "<< duration.count() << " microseconds" << endl;
-                                duration_total = float(duration_total + duration.count()/count_face_yes);
-                                cout << "Average duration after " << count_face_yes << "time(s): " << duration_total << " microseconds" << endl;
+                                cout << "[TEST TIME] Time taken by function: "<< duration.count() << " microseconds" << endl;
+                                duration_total = float((duration_total + duration.count())/count_face_yes);
+                                cout << "[TEST TIME] Average duration after " << count_face_yes << " time(s): " << duration_total << " microseconds" << endl;
 
 #ifdef TEST_LIVING
                                 //test fake face
@@ -558,6 +558,10 @@ int main(int argc, char **argv)
         cv::imshow("Jetson Nano - 2014.5 MHz", frame);
         char esc = cv::waitKey(5);
         if(esc == 27) break;
+
+        // print debugs for project
+        cout << "[TEST ACCURACY] count_face_yes: " << count_face_yes <<  " and count_face_total: " << count_face_total << endl;
+
     }
 
     cv::destroyAllWindows();
