@@ -23,6 +23,9 @@
 #include <algorithm>
 #include <chrono>
 #include <vector>
+//json parse
+//#include <json-c/json.h>
+
 using namespace std;
 using namespace std::chrono;
 //----------------------------------------------------------------------------------------
@@ -474,8 +477,8 @@ int main(int argc, char **argv)
                                 auto stop_timer = high_resolution_clock::now();
                                 auto duration = duration_cast<microseconds>(stop_timer - start_timer);
                                 cout << "[TEST TIME] Time taken by function: "<< duration.count() << " microseconds" << endl;
-                                duration_total = float((duration_total + duration.count())/count_face_yes);
-                                cout << "[TEST TIME] Average duration after " << count_face_yes << " time(s): " << duration_total << " microseconds" << endl;
+                                duration_total = duration_total + duration.count();
+                                cout << "[TEST TIME] Total duration after " << count_face_yes << " time(s): " << duration_total << " microseconds" << endl;
 
 #ifdef TEST_LIVING
                                 //test fake face
