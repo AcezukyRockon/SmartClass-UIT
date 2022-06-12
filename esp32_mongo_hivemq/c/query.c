@@ -14,7 +14,7 @@ int main (int argc, char *argv[])
    mongoc_init ();
 
    client = mongoc_client_new ("mongodb+srv://nhom1:nhom1@smartpodium.ra3hh.mongodb.net/SmartDB?retryWrites=true&w=majority");
-   collection = mongoc_client_get_collection (client, "SmartDB", "LED");
+   collection = mongoc_client_get_collection (client, "SmartDB", "test");
    query = bson_new ();
    cursor = mongoc_collection_find_with_opts (collection, query, NULL, NULL);
 
