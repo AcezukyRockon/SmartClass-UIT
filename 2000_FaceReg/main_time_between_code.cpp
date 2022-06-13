@@ -212,6 +212,9 @@ int main(int argc, char **argv)
     bson_t *doc;
     // lux test case------------------------------------------------------
     int count_face_yes = 0;
+    int count_face_tiny = 0;
+    int count_face_strange = 0;
+    int count_face_fake = 0;
     int count_face_total = 0;
     auto duration_total = 0;
 
@@ -331,8 +334,8 @@ int main(int argc, char **argv)
     }
 
     // RaspiCam or Norton_2.mp4 ?
-    //cv::VideoCapture cap(0);             //RaspiCam
-    cv::VideoCapture cap("Norton_A.mp4");   //Movie
+    cv::VideoCapture cap(0);             //RaspiCam
+    //cv::VideoCapture cap("Norton_A.mp4");   //Movie
     if (!cap.isOpened()) {
         cerr << "ERROR: Unable to open the camera" << endl;
         return 0;
@@ -395,7 +398,7 @@ int main(int argc, char **argv)
                             //recognize a face
                             if(Faces[i].rect.height < MinHeightFace){//##########################################################################################3
                                 Faces[i].Color = 2; //found face in database, but too tiny
-                                //count_face_total++;
+                                count_face_tiny++;
                                 if (NameFaces[Faces[i].NameIndex] == "Nhat Minh") {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
@@ -433,7 +436,7 @@ int main(int argc, char **argv)
                                 Faces[i].Color = 0; //found face in database and of good size
                                 cout << "main: " << NameFaces[Faces[i].NameIndex] << endl;
                                 count_face_yes++;
-                                //count_face_total++;
+
                                 // hardcode: nameindex = 1 => str = "Trang", then put to collection
                                 // hardcode 2: make many if-case with each one in get_collection is a const char (eg one for Trang, one for Minh...)... maybe
                                 //string str_collec = "test";
@@ -492,7 +495,7 @@ int main(int argc, char **argv)
                                 if(Faces[i].LiveProb<=FaceLiving){
                                     Faces[i].Color     =  3; //fake
                                     Faces[i].NameIndex = -3;
-                                    //count_face_total++;
+                                    count_face_fake++;
                                 }
 #endif // TEST_LIVING
                             }
@@ -501,7 +504,8 @@ int main(int argc, char **argv)
                             Faces[i].NameIndex = -1;    //a stranger
                             Faces[i].Color     =  1;
                             mosquitto_facereg(mos_str_off);
-                            //count_face_total++;
+                            count_face_strange++;
+
                         }
                     }
                     // for LUX test case
@@ -563,7 +567,7 @@ int main(int argc, char **argv)
         if(esc == 27) break;
 
         // print debugs for project
-        cout << "[TEST ACCURACY] count_face_yes: " << count_face_yes <<  " and count_face_total: " << count_face_total << endl;
+        cout << "[TEST ACCURACY count_face] yes: " << count_face_yes <<  " | tiny: " << count_face_tiny << " | strange: " << count_face_strange << " | fake: " << count_face_fake << " | total: "<<  count_face_total << endl;
 
     }
 
