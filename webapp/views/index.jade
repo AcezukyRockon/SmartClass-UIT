@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  .container              
+   table.table
+      tr
+        th id
+        th d
+      tbody
+        each i in data
+          tr
+            td #{i.class_id}
+            td #{i.timestamp}
