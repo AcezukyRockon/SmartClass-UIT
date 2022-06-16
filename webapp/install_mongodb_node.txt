@@ -1,10 +1,16 @@
-https://www.mongodb.com/docs/drivers/node/current/compatibility/#mongodb-compatibility
+Install nodes:
 https://forums.developer.nvidia.com/t/how-to-install-node-js/84030/3
 https://forums.developer.nvidia.com/t/about-including-node-js/149421/5
-https://www.npmjs.com/package/mongodb
-
 downgrade: https://stackoverflow.com/questions/47008159/how-to-downgrade-node-version
 https://askubuntu.com/questions/786015/how-to-remove-nodejs-from-ubuntu-16-04
 https://nodejs.org/en/download/releases/
+
+Install express and generator project skeleton:
+https://expressjs.com/en/starter/installing.html
+https://expressjs.com/en/starter/generator.html
+
+Install mongodb:
+https://www.mongodb.com/docs/drivers/node/current/compatibility/#mongodb-compatibility
+https://www.npmjs.com/package/mongodb
 
 Table border: https://www.w3schools.com/html/html_table_borders.asp
