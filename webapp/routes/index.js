@@ -12,21 +12,30 @@ router.get('/', function(req, res, next) {
 	    var in_class_id = req.query.class_id;
 	    dbo.listCollections().toArray(function(err, collInfos) {  
 	    //console.log(collInfos);
-	    if (in_student_name == undefined) {
+	    if (in_student_name == undefined || in_student_name == "") {
 	      res.render('index-notable',{list_col: collInfos});
 	    }
 	    else {
-                console.log(in_class_id);
-		dbo.collection(in_student_name).find({ class_id: { $gt: in_class_id } }).sort({_id:-1}).limit(10).toArray(function(err, result) {
-		  if (err) throw err;
-		  //console.log(collInfos);
-		  res.render('index', { title: in_student_name , list_col: collInfos, data: result});
-		  //db.close();
-		});
+		if (in_class_id == "") {
+		dbo.collection(in_student_name).find().sort({_id:-1}).limit(10).toArray(function(err, result) {
+			  if (err) throw err;
+			  //console.log(result);
+			  res.render('index', { title: in_student_name , list_col: collInfos, data: result});
+			  //db.close();
+			});
+                 }
+		else {
+			dbo.collection(in_student_name).find({ class_id:  in_class_id }).sort({_id:-1}).limit(10).toArray(function(err, result) {
+			  if (err) throw err;
+			  //console.log(result);
+			  res.render('index', { title: in_student_name , list_col: collInfos, data: result});
+			  //db.close();
+			});
+		}
 	    }
 	    }); 
-	  });
-
+	//db.close();
+	  });	
 });
 
 module.exports = router;
