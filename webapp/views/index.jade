@@ -4,13 +4,16 @@ block content
   p Current student: #{title}
   p List of available students:
   ul
-    each tb in list_tb
-      li #{tb.name}
-      
+    each col in list_col
+      li #{col.name}
+
   form(name="add-estimation", method="get")
     div.input
-      span.label Input student: 
-      input(type="text", name="title")
+      span.label Input student name (*): 
+      input(type="text", name="student_name")
+      br
+      span.label Input class ID: 
+      input(type="text", name="class_id")      
     div.actions
       input(type="submit", value="View")
 
