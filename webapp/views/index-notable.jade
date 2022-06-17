@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  p #{title}
+  p List of available students:
+  ul
+    each tb in list_tb
+      li #{tb.name}
+
+  form(name="add-estimation", method="get")
+    div.input
+      span.label Input student: 
+      input(type="text", name="title")
+    div.actions
+      input(type="submit", value="View")
