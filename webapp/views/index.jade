@@ -1,14 +1,25 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  p Current student: #{title}
+  p List of available students:
+  ul
+    each tb in list_tb
+      li #{tb.name}
+      
+  form(name="add-estimation", method="get")
+    div.input
+      span.label Input student: 
+      input(type="text", name="title")
+    div.actions
+      input(type="submit", value="View")
 
+  p 10 latest attendance check:
   .container              
    table.table
       tr
-        th id
-        th d
+        th class_id
+        th timestamp
       tbody
         each i in data
           tr
