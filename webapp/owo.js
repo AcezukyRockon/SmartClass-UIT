@@ -3,9 +3,13 @@ var url = "mongodb://localhost:27017/";
 
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  var dbo = db.db("SmartDB");
+  var adminDb = db.db("SmartDB").admin();
+  adminDb.listDatabases(function(err, result) {
+    console.log(result.databases);
+    db.close();
+  });
 
-
+  /*var dbo = db.db("SmartDB");
   if (tb == undefined) {
     console.log("nothing to retrieve");
     dbo.listCollections().toArray(function(err, collInfos) {
@@ -20,5 +24,5 @@ MongoClient.connect(url, function(err, db) {
     console.log(result);
     db.close();
   }
-  });
+  });*/
 });

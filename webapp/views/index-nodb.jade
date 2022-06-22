@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  p #{title}
+  p List of available lecturer:
+  ul
+    each db in list_db
+      li #{db.name}
+
+  form(name="add-estimation", method="get")
+    div.input
+      span.label Input lecturer: 
+      input(type="text", name="database")
+    div.actions
+      input(type="submit", value="View")

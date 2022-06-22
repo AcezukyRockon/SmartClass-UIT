@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  p Select student name (collection) and class ID (collection attribute)
+  p Select student name (collection), lecturer ID and class ID (collection attribute)
   p List of available students:
   ul
     each col in list_col
@@ -14,6 +14,14 @@ block content
       input(type="text", name="student_name")
       br
       span.label Input class ID: 
-      input(type="text", name="class_id")      
+      input(type="text", name="class_id")     
+      br
+      span.label Input lecturer ID: 
+      input(type="text", name="lecturer_id")     
     div.actions
       input(type="submit", value="View")
+
+  br
+  br
+  h1 Brough to you by RaTruongKip team :D
+

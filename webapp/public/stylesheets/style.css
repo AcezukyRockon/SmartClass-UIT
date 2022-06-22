@@ -10,3 +10,10 @@ a {
 table, th, td {
   border: 1px solid black;
 }
+
+h1 {
+        font-size: 10px;
+        color: #0000FF;
+}
+
+

@@ -1,30 +1,40 @@
 extends layout
 
 block content
-  p Current student: #{title}
+  p Current student: #{title_student_name}
   p List of available students:
   ul
     each col in list_col
       li #{col.name}
 
+  p *: required
   form(name="add-estimation", method="get")
     div.input
       span.label Input student name (*): 
-      input(type="text", name="student_name")
+      input(type="text", name="student_name", value= "#{title_student_name}")
       br
       span.label Input class ID: 
-      input(type="text", name="class_id")      
+      input(type="text", name="class_id", value= "#{title_class_id}")    
+      br
+      span.label Input lecturer ID: 
+      input(type="text", name="lecturer_id", value= "#{title_lecturer_id}")       
     div.actions
       input(type="submit", value="View")
 
-  p 10 latest attendance check:
+  p 50 latest attendance check:
   .container              
    table.table
       tr
         th class_id
+        th lecturer_id
         th timestamp
       tbody
         each i in data
           tr
             td #{i.class_id}
+            td #{i.lecturer_id}
             td #{i.timestamp}
+
+  br
+  br
+  h1 Brough to you by RaTruongKip team :D
