@@ -261,7 +261,7 @@ int main(int argc, char **argv)
     // mosquitto message declaration
     char mos_str_on[4] = "ONN";
     char mos_str_off[4] = "OFF";
-    int startfacecheck_counter = 100;
+    int startfacecheck_counter = 10;
 
     Live.LoadModel();
 
@@ -430,20 +430,24 @@ int main(int argc, char **argv)
                                 if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && ((count_face_yes % startfacecheck_counter) == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
+                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
+                                    mongo_facereg(collection, class_id);
                                 }
                                 else if ((NameFaces[Faces[i].NameIndex] == "Trang") && ((count_face_yes % startfacecheck_counter) == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
+                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
+                                    mongo_facereg(collection, class_id);
                                 }
                                 else if ((count_face_yes % startfacecheck_counter) == 0){
                                     mosquitto_facereg(mos_str_off);
                                     cout << "mosquitto OFF!" << endl;
+                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
+                                    mongo_facereg(collection, class_id);
                                 }
 
                                 // mongo update
                                 //collection = mongoc_client_get_collection (client, "SmartDB", "DiemDanh");
-                                collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-				mongo_facereg(collection, class_id);
                             }
                             else{//##########################################################################################3
                                 auto start_timer = high_resolution_clock::now();
@@ -461,20 +465,24 @@ int main(int argc, char **argv)
                                 if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && ((count_face_total % startfacecheck_counter) == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
+                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
+                                    mongo_facereg(collection, class_id);
                                 }
                                 else if ((NameFaces[Faces[i].NameIndex] == "Trang") && ((count_face_yes % startfacecheck_counter) == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
+                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
+                                    mongo_facereg(collection, class_id);
                                 }
                                 else if ((count_face_yes % startfacecheck_counter) == 0){
                                     mosquitto_facereg(mos_str_off);
                                     cout << "mosquitto OFF!" << endl;
+                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
+                                    mongo_facereg(collection, class_id);
                                 }
 
                                 // mongo update
                                 //collection = mongoc_client_get_collection (client, "SmartDB", "DiemDanh");
-                                collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                mongo_facereg(collection, class_id);
 
                                 auto stop_timer = high_resolution_clock::now();
                                 auto duration = duration_cast<microseconds>(stop_timer - start_timer);
