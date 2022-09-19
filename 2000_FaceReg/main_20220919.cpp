@@ -184,26 +184,33 @@ void mosquitto_facereg(char str[4]){
 	mosquitto_lib_cleanup();
 }
 
- // mongo update (NEED EDIT)
-void mongodb_facereg(){
+// mongo insert
+void mongo_facereg(mongoc_collection_t *collection, char class_id[20]){
+    bson_oid_t oid;
+    bson_t *doc;
+    bson_error_t error;
+	
+    time_t rawtime;
+    struct tm * timeinfo;
+    time ( &rawtime );
+    timeinfo = localtime ( &rawtime );
+    char *s = asctime (timeinfo);
+    s[strlen(s)-1]  = '\0';
+    //printf ( "Current local time and date: %s", asctime (timeinfo) );
 
-  //collection = mongoc_client_get_collection (client, "SmartDB", "DiemDanh");
-  collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-  char class_id[20] = "CE410.M21.MTCL";
-  doc = bson_new ();
-  bson_oid_init (&oid, NULL);
-  BSON_APPEND_OID (doc, "_id", &oid);
-  //BSON_APPEND_UTF8 (doc, "student_name", NameFaces[Faces[i].NameIndex].c_str());
-  BSON_APPEND_UTF8 (doc, "class_id", class_id);
-  BSON_APPEND_UTF8 (doc, "timestamp", s);
+    doc = bson_new ();
+    bson_oid_init (&oid, NULL);
+    BSON_APPEND_OID (doc, "_id", &oid);
+    BSON_APPEND_UTF8 (doc, "class_id", class_id);
+    BSON_APPEND_UTF8 (doc, "timestamp", s);
 
-  if (!mongoc_collection_insert_one (
-         collection, doc, NULL, NULL, &error)) {
-      fprintf (stderr, "%s\n", error.message);
-      cout << "Failed to update mongodb:" << NameFaces[Faces[i].NameIndex] << endl;
-  }
-  bson_destroy (doc);
-  mongoc_collection_destroy (collection); 
+    if (!mongoc_collection_insert_one (
+           collection, doc, NULL, NULL, &error)) {
+        fprintf (stderr, "%s\n", error.message);
+    }
+
+    bson_destroy (doc);
+    mongoc_collection_destroy (collection);
 }
 
 //----------------------------------------------------------------------------------------
@@ -236,9 +243,7 @@ int main(int argc, char **argv)
     // mongodb ----------------------------------------------------------
     mongoc_client_t *client;
     mongoc_collection_t *collection;
-    bson_error_t error;
-    bson_oid_t oid;
-    bson_t *doc;
+	
     // lux test case------------------------------------------------------
     //int count_face_yes = 0;
     //int count_face_tiny = 0;
@@ -247,23 +252,16 @@ int main(int argc, char **argv)
     //int count_face_total = 0;
     //auto duration_total = 0;
 
-    time_t rawtime;
-    struct tm * timeinfo;
-    time ( &rawtime );
-    timeinfo = localtime ( &rawtime );
-    char *s = asctime (timeinfo);
-    s[strlen(s)-1]  = '\0';
-    //printf ( "Current local time and date: %s", asctime (timeinfo) );
-
     mongoc_init ();
-
     //client = mongoc_client_new ("mongodb+srv://nhom1:nhom1@smartpodium.ra3hh.mongodb.net/SmartDB?retryWrites=true&w=majority");
-
     client = mongoc_client_new ("mongodb://localhost:27017");
+    char class_id[20] = "CE410.M21.MTCL";
     // mongodb end-------------------------------------------------------
+	
     // mosquitto message declaration
     char mos_str_on[4] = "ONN";
-	char mos_str_off[4] = "OFF";
+    char mos_str_off[4] = "OFF";
+    int startfacecheck_counter = 100;
 
     Live.LoadModel();
 
@@ -364,8 +362,8 @@ int main(int argc, char **argv)
     }
 
     // RaspiCam or Norton_2.mp4 ?
-    cv::VideoCapture cap(0);             //RaspiCam
-    //cv::VideoCapture cap("Norton_A.mp4");   //Movie
+    //cv::VideoCapture cap(0);             //RaspiCam
+    cv::VideoCapture cap("Norton_A.mp4");   //Movie
     if (!cap.isOpened()) {
         cerr << "ERROR: Unable to open the camera" << endl;
         return 0;
@@ -429,11 +427,11 @@ int main(int argc, char **argv)
                             if(Faces[i].rect.height < MinHeightFace){//##########################################################################################3
                                 Faces[i].Color = 2; //found face in database, but too tiny
                                 count_face_yes++;
-                                if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && (count_face_yes mod 500 == 0)) {
+                                if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && (count_face_yes mod startfacecheck_counter == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
                                 }
-                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && (count_face_yes mod 500 == 0)) {
+                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && (count_face_yes mod startfacecheck_counter == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
                                 }
@@ -445,21 +443,7 @@ int main(int argc, char **argv)
                                 // mongo update
                                 //collection = mongoc_client_get_collection (client, "SmartDB", "DiemDanh");
                                 collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                char class_id[20] = "CE410.M21.MTCL";
-                                doc = bson_new ();
-                                bson_oid_init (&oid, NULL);
-                                BSON_APPEND_OID (doc, "_id", &oid);
-                                //BSON_APPEND_UTF8 (doc, "student_name", NameFaces[Faces[i].NameIndex].c_str());
-                                BSON_APPEND_UTF8 (doc, "class_id", class_id);
-                                BSON_APPEND_UTF8 (doc, "timestamp", s);
-
-                                if (!mongoc_collection_insert_one (
-                                       collection, doc, NULL, NULL, &error)) {
-                                    fprintf (stderr, "%s\n", error.message);
-                                    cout << "Failed to update mongodb:" << NameFaces[Faces[i].NameIndex] << endl;
-                                }
-                                bson_destroy (doc);
-                                mongoc_collection_destroy (collection);
+				mongo_facereg(collection, class_id);
                             }
                             else{//##########################################################################################3
                                 auto start_timer = high_resolution_clock::now();
@@ -474,11 +458,11 @@ int main(int argc, char **argv)
                                 //    str_collec += *k;
 
                                 // mosquitto publish
-                                if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && (count_face_yes mod 500 == 0)) {
+                                if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && (count_face_total mod startfacecheck_counter == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
                                 }
-                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && (count_face_yes mod 500 == 0)) {
+                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && (count_face_yes mod startfacecheck_counter == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
                                 }
@@ -490,21 +474,7 @@ int main(int argc, char **argv)
                                 // mongo update
                                 //collection = mongoc_client_get_collection (client, "SmartDB", "DiemDanh");
                                 collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                char class_id[20] = "CE410.M21.MTCL";
-                                doc = bson_new ();
-                                bson_oid_init (&oid, NULL);
-                                BSON_APPEND_OID (doc, "_id", &oid);
-                                //BSON_APPEND_UTF8 (doc, "student_name", NameFaces[Faces[i].NameIndex].c_str());
-                                BSON_APPEND_UTF8 (doc, "class_id", class_id);
-                                BSON_APPEND_UTF8 (doc, "timestamp", s);
-
-                                if (!mongoc_collection_insert_one (
-                                       collection, doc, NULL, NULL, &error)) {
-                                    fprintf (stderr, "%s\n", error.message);
-                                    cout << "Failed to update mongodb:" << NameFaces[Faces[i].NameIndex] << endl;
-                                }
-                                bson_destroy (doc);
-                                mongoc_collection_destroy (collection);
+                                mongo_facereg(collection, class_id);
 
                                 auto stop_timer = high_resolution_clock::now();
                                 auto duration = duration_cast<microseconds>(stop_timer - start_timer);
@@ -539,7 +509,7 @@ int main(int argc, char **argv)
                     }
                     // for LUX test case
                     //cout << "count_face_yes: " << count_face_yes << endl;
-                    //cout << "count_face_total: " << count_face_total << endl;
+                    //cout << ": " << count_face_total << endl;
                     //count_face_yes_percent = count_face_yes / count_face_total;
                     //cout << "count_face_yes_percent: " << count_face_yes_percent << endl;
                     //std::cout << std::fixed << std::setprecision(2) << count_face_yes_percent << endl;
