@@ -189,7 +189,7 @@ void mongo_facereg(mongoc_collection_t *collection, char class_id[20]){
     bson_oid_t oid;
     bson_t *doc;
     bson_error_t error;
-	
+
     time_t rawtime;
     struct tm * timeinfo;
     time ( &rawtime );
@@ -243,7 +243,7 @@ int main(int argc, char **argv)
     // mongodb ----------------------------------------------------------
     mongoc_client_t *client;
     mongoc_collection_t *collection;
-	
+
     // lux test case------------------------------------------------------
     //int count_face_yes = 0;
     //int count_face_tiny = 0;
@@ -257,7 +257,7 @@ int main(int argc, char **argv)
     client = mongoc_client_new ("mongodb://localhost:27017");
     char class_id[20] = "CE410.M21.MTCL";
     // mongodb end-------------------------------------------------------
-	
+
     // mosquitto message declaration
     char mos_str_on[4] = "ONN";
     char mos_str_off[4] = "OFF";
@@ -427,15 +427,15 @@ int main(int argc, char **argv)
                             if(Faces[i].rect.height < MinHeightFace){//##########################################################################################3
                                 Faces[i].Color = 2; //found face in database, but too tiny
                                 count_face_yes++;
-                                if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && (count_face_yes mod startfacecheck_counter == 0)) {
+                                if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && ((count_face_yes % startfacecheck_counter) == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
                                 }
-                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && (count_face_yes mod startfacecheck_counter == 0)) {
+                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && ((count_face_yes % startfacecheck_counter) == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
                                 }
-                                else if (count_face_yes mod 500 == 0){
+                                else if ((count_face_yes % startfacecheck_counter) == 0){
                                     mosquitto_facereg(mos_str_off);
                                     cout << "mosquitto OFF!" << endl;
                                 }
@@ -458,15 +458,15 @@ int main(int argc, char **argv)
                                 //    str_collec += *k;
 
                                 // mosquitto publish
-                                if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && (count_face_total mod startfacecheck_counter == 0)) {
+                                if ((NameFaces[Faces[i].NameIndex] == "Nhat Minh") && ((count_face_total % startfacecheck_counter) == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
                                 }
-                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && (count_face_yes mod startfacecheck_counter == 0)) {
+                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && ((count_face_yes % startfacecheck_counter) == 0)) {
                                     mosquitto_facereg(mos_str_on);
                                     cout << "mosquitto ON!" << endl;
                                 }
-                                else if (count_face_yes mod 500 == 0){
+                                else if ((count_face_yes % startfacecheck_counter) == 0){
                                     mosquitto_facereg(mos_str_off);
                                     cout << "mosquitto OFF!" << endl;
                                 }
