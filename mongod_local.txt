@@ -3,6 +3,7 @@ https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/
 https://www.freecodecamp.org/news/learn-mongodb-a4ce205e7739/
 https://stackoverflow.com/questions/45821895/how-to-delete-a-collection-in-mongodb-which-has-space-in-between-its-name-i-e-c
 https://kb.objectrocket.com/mongo-db/show-collections-in-mongodb-1287
+https://stackoverflow.com/questions/7714216/add-new-field-to-every-document-in-a-mongodb-collection
 ------------------------------------------------------------------------------------------
 start mongo local:
 sudo systemctl start mongod
@@ -56,6 +57,14 @@ db.myCollection.find().pretty()
 
 Updating documents:
 db.myCollection.update({age : 20}, {$set: {age: 23}})
+
+Add new field multiple documents:
+db.your_collection.update(
+  {},
+  { $set: {"new_field": 1} },
+  false,
+  true
+)
 
 Removing a document:
 db.myCollection.remove({name: "navindu"});
