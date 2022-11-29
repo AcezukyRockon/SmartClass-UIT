@@ -204,7 +204,7 @@ void get_iso_date(char isodate_c [11]) {
 }
 
 // mongo insert
-bool mongo_checkifalrattened(mongoc_collection_t *collection){
+bool mongo_checkifalrattened(mongoc_collection_t *collection, char class_id[20]){
     mongoc_cursor_t *cursor;
     const bson_t *doc;
     bson_t *query;
@@ -215,6 +215,7 @@ bool mongo_checkifalrattened(mongoc_collection_t *collection){
 
     query = bson_new ();
     BSON_APPEND_UTF8 (query, "iso_date", isodate_c);
+    BSON_APPEND_UTF8 (query, "class_id", class_id);
 
     cursor = mongoc_collection_find_with_opts (collection, query, NULL, NULL);
 
@@ -304,7 +305,7 @@ int main(int argc, char **argv)
     mongoc_init ();
     //client = mongoc_client_new ("mongodb+srv://nhom1:nhom1@smartpodium.ra3hh.mongodb.net/SmartDB?retryWrites=true&w=majority");
     client = mongoc_client_new ("mongodb://localhost:27017");
-    char class_id[20] = "CE410.M21.MTCL";
+    char class_id[20] = "CE411.M21.MTCL";
     // mongodb end-------------------------------------------------------
 
     // mosquitto message declaration
@@ -528,11 +529,10 @@ int main(int argc, char **argv)
                                 }
                                 else if ((count_face_yes % startfacecheck_counter) == 0){
                                     collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                    if (mongo_checkifalrattened(collection) == 0) {
+                                    if (mongo_checkifalrattened(collection, class_id) == 0) {
                                         mosquitto_facereg(mos_str_off);
                                         cout << "mosquitto OFF!" << endl;
                                         mongo_facereg(collection, class_id);
-                                        mongo_checkifalrattened(collection);
                                         mongoc_collection_destroy (collection);
                                     }
                                     else cout << "alr reg" << endl;
