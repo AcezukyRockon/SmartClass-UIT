@@ -1,0 +1,7 @@
+C/C++:
+https://www.javatpoint.com/how-to-split-strings-in-cpp
+https://stackoverflow.com/questions/9527960/how-do-i-construct-an-iso-8601-datetime-in-c
+
+Javascript:
+https://stackoverflow.com/questions/10211145/getting-current-date-and-time-in-javascript
+https://stackoverflow.com/questions/25159330/how-to-convert-an-iso-date-to-the-date-format-yyyy-mm-dd
