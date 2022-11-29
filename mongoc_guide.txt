@@ -5,6 +5,8 @@ http://mongoc.org/
 http://mongoc.org/libmongoc/current/tutorial.html
 https://stackoverflow.com/questions/5141960/get-the-current-time-in-c
 https://stackoverflow.com/questions/9628637/how-can-i-get-rid-of-n-from-string-in-c
+https://stackoverflow.com/questions/33000712/c-mongodb-driver-how-to-add-date
+http://mongoc.org/libbson/current/bson_append_now_utc.html
 
 mongo server:
 https://www.mongodb.com/docs/guides/server/install/
