@@ -9,10 +9,10 @@ String ledStatus1 = "1stLEDisONN";
 String ledStatus2 = "2ndLEDisONN";
 String ledStatus3 = "3rdLEDisONN";
  
-const char* ssid = "Unsainted";
-const char* password = "qwertyuiop";
+const char* ssid = "";
+const char* password = "";
  
-#define MQTT_SERVER "192.168.196.86"
+#define MQTT_SERVER "192.168.23.86"
 #define MQTT_PORT 1883
 #define MQTT_USER ""
 #define MQTT_PASSWORD ""
