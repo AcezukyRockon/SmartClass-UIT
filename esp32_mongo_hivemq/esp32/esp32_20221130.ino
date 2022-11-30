@@ -4,11 +4,13 @@
 #define BUT2 0
 #define LED1 14
 #define LED2 12
+#define LED3 13
 String ledStatus1 = "1stLEDisONN";
 String ledStatus2 = "2ndLEDisONN";
+String ledStatus3 = "3rdLEDisONN";
  
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "Unsainted";
+const char* password = "qwertyuiop";
  
 #define MQTT_SERVER "192.168.196.86"
 #define MQTT_PORT 1883
@@ -17,6 +19,7 @@ const char* password = "";
  
 #define MQTT_LED1_TOPIC "ESP32/LED1"
 #define MQTT_LED2_TOPIC "ESP32/LED2"
+#define MQTT_LED3_TOPIC "ESP32/LED3"
  
 unsigned long previousMillis = 0; 
 const long interval = 5000;
@@ -48,6 +51,7 @@ void connect_to_broker() {
       Serial.println("connected");
       client.subscribe(MQTT_LED1_TOPIC);
       client.subscribe(MQTT_LED2_TOPIC);
+      client.subscribe(MQTT_LED3_TOPIC);
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -77,6 +81,9 @@ void callback(char* topic, byte *payload, unsigned int length) {
       ledStatus1 = "1stLEDisONN";
       digitalWrite(LED1, HIGH);
       Serial.println("1stLEDisONN");
+      delay(2000);
+      digitalWrite(LED1, LOW);
+      Serial.println("led1 turned off after 2s");
     }
     else if(String(status) == "1stLEDisOFF")
     {
@@ -99,6 +106,23 @@ void callback(char* topic, byte *payload, unsigned int length) {
       ledStatus2 = "2ndLEDisOFF";
       digitalWrite(LED2, LOW);
       Serial.println("2ndLEDisOFF");
+    }
+  }
+  if(String(topic) == MQTT_LED3_TOPIC)
+  {
+    if(String(status) == "3rdLEDisONN")
+    {
+      ledStatus2 = "3rdLEDisONN";
+      digitalWrite(LED3, HIGH);
+      Serial.println("3rdLEDisONN");
+      delay(5000);
+      digitalWrite(LED3, LOW);
+    }
+    else if(String(status) == "3rdLEDisOFF")
+    {
+      ledStatus2 = "3rdLEDisOFF";
+      digitalWrite(LED3, LOW);
+      Serial.println("3rdLEDisOFF");
     }
   }
    
