@@ -305,13 +305,14 @@ int main(int argc, char **argv)
     mongoc_init ();
     //client = mongoc_client_new ("mongodb+srv://nhom1:nhom1@smartpodium.ra3hh.mongodb.net/SmartDB?retryWrites=true&w=majority");
     client = mongoc_client_new ("mongodb://localhost:27017");
-    char class_id[20] = "CE411.M21.MTCL";
+    char class_id[20] = "CE412.M21.MTCL";
     // mongodb end-------------------------------------------------------
 
     // mosquitto message declaration
     //char mos_str_on[4] = "ONN";
     //char mos_str_off[4] = "OFF";
-    int startfacecheck_counter = 10;
+    int startfacecheck_counter = 20;
+	int while_counter = 0;
 
     Live.LoadModel();
 
@@ -451,12 +452,13 @@ int main(int argc, char **argv)
         //run through the faces only when you got one face.
         //more faces (if large enough) are not a problem
         //in this app with an input image of 324x240, they become too tiny
-        if(Faces.size()==1){
+
+		if(Faces.size()==1){
             //looks stupid, running through a loop of size 1
             //however, for your convenience using [i]
             for(i=0;i<Faces.size();i++){
-                auto start_timer = high_resolution_clock::now();
                 if(Faces[i].FaceProb>MinFaceThreshold){
+					auto start_timer = high_resolution_clock::now();
                     //get centre aligned image
                     cv::Mat aligned = Warp.Process(result_cnn,Faces[i]);
                     Faces[i].Angle  = Warp.Angle;
@@ -479,38 +481,25 @@ int main(int argc, char **argv)
                             if(Faces[i].rect.height < MinHeightFace){//##########################################################################################3
                                 Faces[i].Color = 2; //found face in database, but too tiny
                                 count_face_yes++;
-                                if ((NameFaces[Faces[i].NameIndex] == "Minh") && ((count_face_total % startfacecheck_counter) == 0)) {
-                                    mosquitto_facereg("ESP32/LED2","2ndLEDisOFF");
+                                if ((count_face_yes % startfacecheck_counter) == 0){
+                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
                                     mosquitto_facereg("ESP32/LED1","1stLEDisONN");
-                                    cout << "mosquitto 1 ON!" << endl;
-                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                    mongo_facereg(collection, class_id);
-									//for (int delay_i = 0; delay_i < 150; i++){
-									//	mosquitto_facereg("ESP32/LED1","1stLEDisOFF");
-									//}
-                                }
-                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && ((count_face_yes % startfacecheck_counter) == 0)) {
-                                    mosquitto_facereg("ESP32/LED1","1stLEDisOFF");
-                                    mosquitto_facereg("ESP32/LED2","2ndLEDisONN");
-                                    cout << "mosquitto 2 ON!" << endl;
-                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                    mongo_facereg(collection, class_id);
-									//for (int delay_i = 0; delay_i < 150; i++){
-									//	mosquitto_facereg("ESP32/LED1","2ndLEDisOFF");
-									//}
-                                }
-                                else if ((count_face_yes % startfacecheck_counter) == 0){
-                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                    cout << "mosquitto OFF!" << endl;
-                                    mosquitto_facereg("ESP32/LED1","1stLEDisOFF");
-                                    mosquitto_facereg("ESP32/LED2","2ndLEDisOFF");
                                     if (mongo_checkifalrattened(collection, class_id) == 0) {
                                         mongo_facereg(collection, class_id);
                                         mongoc_collection_destroy (collection);
+										cout << "updated " << NameFaces[Faces[i].NameIndex].c_str() << " to database" << endl;
                                     }
-                                    else cout << "alr reg" << endl;
-                                    //mongoc_collection_destroy (collection);
+                                    else cout << NameFaces[Faces[i].NameIndex].c_str() << " alr reg" << endl;
                                 }
+
+								if ((count_face_yes % startfacecheck_counter) == 0){
+									auto stop_timer = high_resolution_clock::now();
+									auto duration = duration_cast<microseconds>(stop_timer - start_timer);
+									cout << "[TEST TIME] Time taken by function: "<< duration.count() << " microseconds" << endl;
+									//duration_total = duration_total + duration.count();
+									//cout << "[TEST TIME] Total duration after " << count_face_yes << " time(s): " << duration_total << " microseconds" << endl;
+								}
+
                             }
                             else{//##########################################################################################3
                                 //auto start_timer = high_resolution_clock::now();
@@ -519,44 +508,24 @@ int main(int argc, char **argv)
                                 count_face_yes++;
 
                                 // mosquitto publish
-                                if ((NameFaces[Faces[i].NameIndex] == "Minh") && ((count_face_total % startfacecheck_counter) == 0)) {
-                                    mosquitto_facereg("ESP32/LED2","2ndLEDisOFF");
+                                if ((count_face_yes % startfacecheck_counter) == 0){
+                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
                                     mosquitto_facereg("ESP32/LED1","1stLEDisONN");
-                                    cout << "mosquitto 1 ON!" << endl;
-                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                    mongo_facereg(collection, class_id);
-									//for (int delay_i = 0; delay_i < 150; i++){
-									//	mosquitto_facereg("ESP32/LED1","1stLEDisOFF");
-									//}
-                                }
-                                else if ((NameFaces[Faces[i].NameIndex] == "Trang") && ((count_face_yes % startfacecheck_counter) == 0)) {
-                                    mosquitto_facereg("ESP32/LED1","1stLEDisOFF");
-                                    mosquitto_facereg("ESP32/LED2","2ndLEDisONN");
-                                    cout << "mosquitto 2 ON!" << endl;
-                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                    mongo_facereg(collection, class_id);
-									//for (int delay_i = 0; delay_i < 150; i++){
-									//	mosquitto_facereg("ESP32/LED1","2ndLEDisOFF");
-									//}
-                                }
-                                else if ((count_face_yes % startfacecheck_counter) == 0){
-                                    collection = mongoc_client_get_collection (client, "SmartDB", NameFaces[Faces[i].NameIndex].c_str());
-                                    cout << "mosquitto OFF!" << endl;
-                                    mosquitto_facereg("ESP32/LED1","1stLEDisOFF");
-                                    mosquitto_facereg("ESP32/LED2","2ndLEDisOFF");
                                     if (mongo_checkifalrattened(collection, class_id) == 0) {
                                         mongo_facereg(collection, class_id);
                                         mongoc_collection_destroy (collection);
+										cout << "updated " << NameFaces[Faces[i].NameIndex].c_str() << " to database" << endl;
                                     }
-                                    else cout << "alr reg" << endl;
-                                    //mongoc_collection_destroy (collection);
+                                    else cout << NameFaces[Faces[i].NameIndex].c_str() << " alr reg" << endl;
                                 }
 
-                                auto stop_timer = high_resolution_clock::now();
-                                auto duration = duration_cast<microseconds>(stop_timer - start_timer);
-                                cout << "[TEST TIME] Time taken by function: "<< duration.count() << " microseconds" << endl;
-                                duration_total = duration_total + duration.count();
-                                cout << "[TEST TIME] Total duration after " << count_face_yes << " time(s): " << duration_total << " microseconds" << endl;
+								if ((count_face_yes % startfacecheck_counter) == 0){
+									auto stop_timer = high_resolution_clock::now();
+									auto duration = duration_cast<microseconds>(stop_timer - start_timer);
+									cout << "[TEST TIME] Time taken by function: "<< duration.count() << " microseconds" << endl;
+									//duration_total = duration_total + duration.count();
+									//cout << "[TEST TIME] Total duration after " << count_face_yes << " time(s): " << duration_total << " microseconds" << endl;
+								}
 
 #ifdef TEST_LIVING
                                 //test fake face
@@ -579,7 +548,6 @@ int main(int argc, char **argv)
                             Faces[i].NameIndex = -1;    //a stranger
                             Faces[i].Color     =  1;
                             count_face_strange++;
-
                         }
                     }
                     // for LUX test case
@@ -642,11 +610,10 @@ int main(int argc, char **argv)
         // print debugs for project
         //count_face_total = count_face_yes + count_face_tiny + count_face_strange + count_face_fake;
         //cout << "[TEST ACCURACY count_face] yes: " << count_face_yes <<  " | tiny: " << count_face_tiny << " | stranger: " << count_face_strange << " | fake: " << count_face_fake << " | total: "<<  count_face_total << endl;
-        if(count_face_total==1000)
-        {
-            exit(0);
-        }
-
+        //if(count_face_total==1000)
+        //{
+        //    exit(0);
+        //}
     }
     cv::destroyAllWindows();
     mongoc_client_destroy (client);
