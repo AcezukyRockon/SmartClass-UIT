@@ -312,7 +312,6 @@ int main(int argc, char **argv)
     //char mos_str_on[4] = "ONN";
     //char mos_str_off[4] = "OFF";
     int startfacecheck_counter = 20;
-	int while_counter = 0;
 
     Live.LoadModel();
 
@@ -458,7 +457,7 @@ int main(int argc, char **argv)
             //however, for your convenience using [i]
             for(i=0;i<Faces.size();i++){
                 if(Faces[i].FaceProb>MinFaceThreshold){
-					auto start_timer = high_resolution_clock::now();
+                    auto start_timer = high_resolution_clock::now();
                     //get centre aligned image
                     cv::Mat aligned = Warp.Process(result_cnn,Faces[i]);
                     Faces[i].Angle  = Warp.Angle;
