@@ -312,6 +312,8 @@ int main(int argc, char **argv)
     //char mos_str_on[4] = "ONN";
     //char mos_str_off[4] = "OFF";
     int startfacecheck_counter = 20;
+	int check_timer_startface_recognizeface = 0;
+	auto start_timer = high_resolution_clock::now();
 
     Live.LoadModel();
 
@@ -412,8 +414,9 @@ int main(int argc, char **argv)
     }
 
     // RaspiCam or Norton_2.mp4 ?
-    cv::VideoCapture cap(0);             //RaspiCam
+    //cv::VideoCapture cap(0);             //RaspiCam
     //cv::VideoCapture cap("Norton_A.mp4");   //Movie
+    cv::VideoCapture cap("cut.mp4");   //Movie
     if (!cap.isOpened()) {
         cerr << "ERROR: Unable to open the camera" << endl;
         return 0;
@@ -457,7 +460,10 @@ int main(int argc, char **argv)
             //however, for your convenience using [i]
             for(i=0;i<Faces.size();i++){
                 if(Faces[i].FaceProb>MinFaceThreshold){
-                    auto start_timer = high_resolution_clock::now();
+					if (check_timer_startface_recognizeface == 0) {
+						start_timer = high_resolution_clock::now();
+						check_timer_startface_recognizeface = 1;
+					}
                     //get centre aligned image
                     cv::Mat aligned = Warp.Process(result_cnn,Faces[i]);
                     Faces[i].Angle  = Warp.Angle;
@@ -498,7 +504,7 @@ int main(int argc, char **argv)
 									//duration_total = duration_total + duration.count();
 									//cout << "[TEST TIME] Total duration after " << count_face_yes << " time(s): " << duration_total << " microseconds" << endl;
 								}
-
+								check_timer_startface_recognizeface = 0;
                             }
                             else{//##########################################################################################3
                                 //auto start_timer = high_resolution_clock::now();
@@ -525,6 +531,7 @@ int main(int argc, char **argv)
 									//duration_total = duration_total + duration.count();
 									//cout << "[TEST TIME] Total duration after " << count_face_yes << " time(s): " << duration_total << " microseconds" << endl;
 								}
+								check_timer_startface_recognizeface = 0;
 
 #ifdef TEST_LIVING
                                 //test fake face
