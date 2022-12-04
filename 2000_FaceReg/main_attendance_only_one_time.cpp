@@ -416,7 +416,7 @@ int main(int argc, char **argv)
     // RaspiCam or Norton_2.mp4 ?
     //cv::VideoCapture cap(0);             //RaspiCam
     //cv::VideoCapture cap("Norton_A.mp4");   //Movie
-    cv::VideoCapture cap("cut.mp4");   //Movie
+    cv::VideoCapture cap("cut2.mp4");   //Movie
     if (!cap.isOpened()) {
         cerr << "ERROR: Unable to open the camera" << endl;
         return 0;
@@ -456,14 +456,14 @@ int main(int argc, char **argv)
         //in this app with an input image of 324x240, they become too tiny
 
 		if(Faces.size()==1){
+            if (check_timer_startface_recognizeface == 0) {
+                start_timer = high_resolution_clock::now();
+                check_timer_startface_recognizeface = 1;
+            }
             //looks stupid, running through a loop of size 1
             //however, for your convenience using [i]
             for(i=0;i<Faces.size();i++){
                 if(Faces[i].FaceProb>MinFaceThreshold){
-					if (check_timer_startface_recognizeface == 0) {
-						start_timer = high_resolution_clock::now();
-						check_timer_startface_recognizeface = 1;
-					}
                     //get centre aligned image
                     cv::Mat aligned = Warp.Process(result_cnn,Faces[i]);
                     Faces[i].Angle  = Warp.Angle;
