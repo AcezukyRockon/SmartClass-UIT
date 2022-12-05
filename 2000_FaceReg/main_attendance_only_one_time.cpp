@@ -305,7 +305,7 @@ int main(int argc, char **argv)
     mongoc_init ();
     //client = mongoc_client_new ("mongodb+srv://nhom1:nhom1@smartpodium.ra3hh.mongodb.net/SmartDB?retryWrites=true&w=majority");
     client = mongoc_client_new ("mongodb://localhost:27017");
-    char class_id[20] = "CE412.M21.MTCL";
+    char class_id[20] = "CE410.M21.MTCL";
     // mongodb end-------------------------------------------------------
 
     // mosquitto message declaration
@@ -416,7 +416,7 @@ int main(int argc, char **argv)
     // RaspiCam or Norton_2.mp4 ?
     //cv::VideoCapture cap(0);             //RaspiCam
     //cv::VideoCapture cap("Norton_A.mp4");   //Movie
-    cv::VideoCapture cap("cut2.mp4");   //Movie
+    cv::VideoCapture cap("Minh_2.mp4");   //Movie
     if (!cap.isOpened()) {
         cerr << "ERROR: Unable to open the camera" << endl;
         return 0;
