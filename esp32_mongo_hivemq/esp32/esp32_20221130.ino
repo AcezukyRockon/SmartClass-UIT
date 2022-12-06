@@ -5,14 +5,19 @@
 #define LED1 14
 #define LED2 12
 #define LED3 13
-String ledStatus1 = "1stLEDisONN";
-String ledStatus2 = "2ndLEDisONN";
-String ledStatus3 = "3rdLEDisONN";
+int ledStatus1;
+int ledStatus2;
+int lastButton1State;
+int lastButton2State;
+int button1_state;
+int button2_state;
+
  
 const char* ssid = "";
 const char* password = "";
  
-#define MQTT_SERVER "192.168.23.86"
+//#define MQTT_SERVER "192.168.23.86"
+#define MQTT_SERVER "broker.mqttdashboard.com"
 #define MQTT_PORT 1883
 #define MQTT_USER ""
 #define MQTT_PASSWORD ""
@@ -78,18 +83,13 @@ void callback(char* topic, byte *payload, unsigned int length) {
   {
     if(String(status) == "1stLEDisONN")
     {
-      ledStatus1 = "1stLEDisONN";
+      ledStatus1 = HIGH;
       digitalWrite(LED1, HIGH);
-      Serial.println("1stLEDisONN");
-      delay(2000);
-      digitalWrite(LED1, LOW);
-      Serial.println("led1 turned off after 2s");
     }
     else if(String(status) == "1stLEDisOFF")
     {
-      ledStatus1 = "1stLEDisOFF";
+      ledStatus1 = LOW;
       digitalWrite(LED1, LOW);
-      Serial.println("1stLEDisOFF");
     }
   }
  
@@ -97,35 +97,26 @@ void callback(char* topic, byte *payload, unsigned int length) {
   {
     if(String(status) == "2ndLEDisONN")
     {
-      ledStatus2 = "2ndLEDisONN";
+      ledStatus2 = HIGH;
       digitalWrite(LED2, HIGH);
-      Serial.println("2ndLEDisONN");
     }
     else if(String(status) == "2ndLEDisOFF")
     {
-      ledStatus2 = "2ndLEDisOFF";
+      ledStatus2 = LOW;
       digitalWrite(LED2, LOW);
-      Serial.println("2ndLEDisOFF");
     }
   }
   if(String(topic) == MQTT_LED3_TOPIC)
   {
-    if(String(status) == "3rdLEDisONN")
+    if(String(status) == "LEDAttended")
     {
-      ledStatus2 = "3rdLEDisONN";
       digitalWrite(LED3, HIGH);
-      Serial.println("3rdLEDisONN");
-      delay(5000);
+      //Serial.println("LEDAttended");
+      delay(2000);
       digitalWrite(LED3, LOW);
+      Serial.println("led3 turned off after 2s");
     }
-    else if(String(status) == "3rdLEDisOFF")
-    {
-      ledStatus2 = "3rdLEDisOFF";
-      digitalWrite(LED3, LOW);
-      Serial.println("3rdLEDisOFF");
-    }
-  }
-   
+  }  
 }
  
 void setup() {
@@ -140,6 +131,7 @@ void setup() {
   pinMode(BUT2, INPUT_PULLUP);
   pinMode(LED1, OUTPUT);
   pinMode(LED2, OUTPUT);
+  pinMode(LED3, OUTPUT);
 }
  
   
@@ -148,39 +140,20 @@ void loop() {
   if (!client.connected()) {
     connect_to_broker();
   }
+  lastButton1State = button1_state;
+  lastButton2State = button2_state;
+  button1_state = digitalRead(BUT1);
+  button2_state = digitalRead(BUT2);
  
-  if(digitalRead(BUT1) == 0) 
-  {
-    while (digitalRead(BUT1) == 0)
-    {
-      /* cho nut dc nha */
-    }
-    if(ledStatus1 == "1stLEDisOFF")
-    {
-      client.publish(MQTT_LED1_TOPIC, "1stLEDisONN");
-      ledStatus1 = "1stLEDisONN";
-    }
-    else if(ledStatus1 == "1stLEDisONN")
-    {
-      client.publish(MQTT_LED1_TOPIC, "1stLEDisOFF");
-      ledStatus1 = "1stLEDisOFF";
-    }
+  if(lastButton1State == HIGH && button1_state == LOW) {
+    Serial.println("The button 1 is pressed");
+    ledStatus1 = !ledStatus1;
+    digitalWrite(LED1, ledStatus1); 
   }
-  if(digitalRead(BUT2) == 0) 
-  {
-    while (digitalRead(BUT2) == 0)
-    {
-      /* cho nut dc nha */
-    }
-    if(ledStatus2 == "2ndLEDisONN")
-    {
-      client.publish(MQTT_LED2_TOPIC, "2ndLEDisOFF");
-      ledStatus2 = "2ndLEDisOFF";
-    }
-    else if(ledStatus2 == "2ndLEDisOFF")
-    {
-      client.publish(MQTT_LED2_TOPIC, "2ndLEDisONN");
-       ledStatus2 = "2ndLEDisONN";
-    }
+  
+  if(lastButton2State == HIGH && button2_state == LOW) {
+    Serial.println("The button 2 is pressed");
+    ledStatus2 = !ledStatus2;
+    digitalWrite(LED2, ledStatus2); 
   }
 }
