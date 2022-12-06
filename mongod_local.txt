@@ -4,6 +4,8 @@ https://www.freecodecamp.org/news/learn-mongodb-a4ce205e7739/
 https://stackoverflow.com/questions/45821895/how-to-delete-a-collection-in-mongodb-which-has-space-in-between-its-name-i-e-c
 https://kb.objectrocket.com/mongo-db/show-collections-in-mongodb-1287
 https://stackoverflow.com/questions/7714216/add-new-field-to-every-document-in-a-mongodb-collection
+https://stackoverflow.com/questions/57961767/how-to-pass-selected-value-from-dropdown-of-a-jade-template-to-a-rest-api-in-nod
+https://stackoverflow.com/questions/1531093/how-do-i-get-the-current-date-in-javascript
 ------------------------------------------------------------------------------------------
 start mongo local:
 sudo systemctl start mongod
