@@ -149,11 +149,15 @@ void loop() {
     Serial.println("The button 1 is pressed");
     ledStatus1 = !ledStatus1;
     digitalWrite(LED1, ledStatus1); 
+    if(ledStatus1 == HIGH) client.publish(MQTT_LED1_TOPIC, "LED1 is ON via button");
+    if(ledStatus1 == LOW) client.publish(MQTT_LED1_TOPIC, "LED1 is OFF via button");
   }
   
   if(lastButton2State == HIGH && button2_state == LOW) {
     Serial.println("The button 2 is pressed");
     ledStatus2 = !ledStatus2;
     digitalWrite(LED2, ledStatus2); 
+    if(ledStatus2 == HIGH) client.publish(MQTT_LED2_TOPIC, "LED2 is ON via button");
+    if(ledStatus2 == LOW) client.publish(MQTT_LED2_TOPIC, "LED2 is OFF via button");
   }
 }
