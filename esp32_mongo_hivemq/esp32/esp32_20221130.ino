@@ -12,12 +12,11 @@ int lastButton2State;
 int button1_state;
 int button2_state;
 
+const char* ssid = "Unsainted";
+const char* password = "qwertyuiop";
  
-const char* ssid = "";
-const char* password = "";
- 
-//#define MQTT_SERVER "192.168.23.86"
-#define MQTT_SERVER "broker.mqttdashboard.com"
+#define MQTT_SERVER "192.168.203.86"
+//#define MQTT_SERVER "broker.mqttdashboard.com"
 #define MQTT_PORT 1883
 #define MQTT_USER ""
 #define MQTT_PASSWORD ""
